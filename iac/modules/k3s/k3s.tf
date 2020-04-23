@@ -38,5 +38,4 @@ data "external" "kubeconfig" {
   depends_on = [null_resource.kubeconfig]
 
   program = ["/bin/bash", "-c", "echo \"{\\\"kubeconfig\\\":\\\"kubeconfig.yaml\\\"}\""]
-  // program = ["/bin/bash", "-c", "KUBECONFIG=kubeconfig.yaml kubectl config view --raw -o json"]
 }
