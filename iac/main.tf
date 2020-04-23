@@ -18,15 +18,18 @@ module "k3s" {
 provider "kubernetes" {
   alias = "asgard"
 
-  config_path = module.k3s.kubeconfig
+  load_config_file = true
+  config_path      = "${path.module}/${module.k3s.kubeconfig}"
 }
 
 provider "helm" {
   alias = "asgard"
 
   kubernetes {
-    config_path = module.k3s.kubeconfig
+    load_config_file = true
+    config_path      = "${path.module}/${module.k3s.kubeconfig}"
   }
+  debug = true
 }
 
 data "helm_repository" "stable" {
@@ -39,11 +42,21 @@ data "helm_repository" "stable" {
 module "nats" {
   source    = "./modules/nats"
   namespace = "default"
+
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
+  }
 }
 
 module "minio" {
   source    = "./modules/minio"
   namespace = "default"
+
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
+  }
 
   config = {
     replicas     = 1
@@ -55,11 +68,12 @@ module "minio" {
 module "wintermute" {
   source = "./modules/wintermute"
 
-  nats = {
-    host = module.nats.host
-    port = 6222
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
   }
 
+  nats  = module.nats
   minio = module.minio
 }
 

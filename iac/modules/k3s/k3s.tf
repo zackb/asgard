@@ -24,6 +24,8 @@ module "k3s" {
 }
 
 resource null_resource kubeconfig {
+  depends_on = [module.k3s]
+
   provisioner "local-exec" {
     command = "scp ${var.master.user}@${var.master.host}:/etc/rancher/k3s/k3s.yaml kubeconfig && kubectl config view --raw | sed -E s/127.0.0.1/${var.master.host}/g > kubeconfig.yaml && rm kubeconfig"
     environment = {
@@ -33,6 +35,8 @@ resource null_resource kubeconfig {
 }
 
 data "external" "kubeconfig" {
+  depends_on = [null_resource.kubeconfig]
+
   program = ["/bin/bash", "-c", "echo \"{\\\"kubeconfig\\\":\\\"kubeconfig.yaml\\\"}\""]
   // program = ["/bin/bash", "-c", "KUBECONFIG=kubeconfig.yaml kubectl config view --raw -o json"]
 }
