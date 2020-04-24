@@ -7,3 +7,14 @@ variable "master" {
     private_key = string
   })
 }
+
+variable "nodes" {
+  description = "worker node configuration"
+  type = map(object({
+    name       = string
+    ip         = string
+    labels     = map(string)
+    taints     = map(string)
+    connection = map(any)
+  }))
+}

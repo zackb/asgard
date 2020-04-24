@@ -1,17 +1,7 @@
-variable "name" {
-  type        = string
-  description = "name of the cluster"
-  default     = "asgard"
-}
-
 module "k3s" {
   source = "./modules/k3s"
-  master = {
-    name        = "odin"
-    host        = "192.168.1.200"
-    user        = "root"
-    private_key = file("~/.ssh/id_rsa")
-  }
+  master = var.master
+  nodes  = var.nodes
 }
 
 # PROVIDERS

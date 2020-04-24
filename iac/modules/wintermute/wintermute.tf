@@ -3,6 +3,7 @@ resource "helm_release" "wintermute" {
   namespace = var.namespace
   chart     = "../../wintermute/helm/wintermute"
   version   = "0.3.8"
+  timeout   = 600
 
   set {
     name  = "mute.message"

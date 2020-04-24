@@ -18,9 +18,11 @@ module "k3s" {
       type        = "ssh"
       host        = var.master.host
       user        = var.master.user
-      private_key = var.master.private_key
+      private_key = file(var.master.private_key)
     }
   }
+
+  agent_nodes = var.nodes
 }
 
 resource null_resource kubeconfig {
