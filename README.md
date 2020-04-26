@@ -1,5 +1,5 @@
 # Asgard
-This is a terraform definition to install and manage Kubernetes on a cluster of Raspberry PIs. It also optionally installs some useful software.
+This is a terraform definition to install and manage Kubernetes on a cluster of Raspberry Pis. It also optionally installs some useful software.
 
 
 
