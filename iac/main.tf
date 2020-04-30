@@ -1,9 +1,3 @@
-module "k3s" {
-  source = "./modules/k3s"
-  master = var.master
-  nodes  = var.nodes
-}
-
 # PROVIDERS
 provider "kubernetes" {
   alias = "asgard"
@@ -27,6 +21,13 @@ data "helm_repository" "stable" {
   name     = "stable"
   url      = "https://kubernetes-charts.storage.googleapis.com"
 }
+
+module "k3s" {
+  source = "./modules/k3s"
+  master = var.master
+  nodes  = var.nodes
+}
+
 
 # APPS
 module "nats" {

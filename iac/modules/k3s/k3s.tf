@@ -22,7 +22,40 @@ module "k3s" {
     }
   }
 
-  agent_nodes = var.nodes
+  // TODO!
+  // agent_nodes = var.nodes
+  agent_nodes = {
+    thor = {
+      name = "thor"
+      ip   = "192.168.1.201"
+      labels = {
+        "node.kubernetes.io/pool"        = "service-pool"
+        "node-role.kubernetes.io/worker" = "true"
+      }
+      taints = {}
+      connection = {
+        type        = "ssh"
+        host        = "192.168.1.201"
+        user        = "root"
+        private_key = file(var.master.private_key)
+      }
+    },
+    fenris = {
+      name = "fenris"
+      ip   = "192.168.1.202"
+      labels = {
+        "node.kubernetes.io/pool"        = "service-pool"
+        "node-role.kubernetes.io/worker" = "true"
+      }
+      taints = {}
+      connection = {
+        type        = "ssh"
+        host        = "192.168.1.202"
+        user        = "root"
+        private_key = file(var.master.private_key)
+      }
+    },
+  }
 }
 
 resource null_resource kubeconfig {

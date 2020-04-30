@@ -30,23 +30,37 @@ variable "nodes" {
     taints     = map(string)
     connection = map(any)
   }))
-  default = {}
-  /*
+  // TODO!
   default = {
     thor = {
       name = "thor"
-      ip = "192.168.1.201"
+      ip   = "192.168.1.201"
       labels = {
-        "node.kubernetes.io/pool" = "service-pool"
+        "node.kubernetes.io/pool"        = "service-pool"
+        "node-role.kubernetes.io/worker" = "true"
       }
       taints = {}
       connection = {
         type        = "ssh"
         host        = "192.168.1.201"
         user        = "root"
-        private_key = "~/.ssh/id_rsa"
+        private_key = "/Users/zack/.ssh/id_rsa"
+      }
+    },
+    fenris = {
+      name = "fenris"
+      ip   = "192.168.1.202"
+      labels = {
+        "node.kubernetes.io/pool"        = "service-pool"
+        "node-role.kubernetes.io/worker" = "true"
+      }
+      taints = {}
+      connection = {
+        type        = "ssh"
+        host        = "192.168.1.202"
+        user        = "root"
+        private_key = "/Users/zack/.ssh/id_rsa"
       }
     },
   }
-  */
 }
