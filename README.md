@@ -29,35 +29,18 @@ master = {
     private_key = "~/.ssh/id_rsa"
 }
 
-nodes = {
-    thor = {
-      name = "thor"
-      ip = "192.168.1.201"
-      labels = {
-        "node.kubernetes.io/pool" = "service-pool"
-      }
-      taints = {}
-      connection = {
-        type        = "ssh"
-        host        = "192.168.1.201"
-        user        = "root"
-        private_key = "~/.ssh/id_rsa"
-      }
+nodes = [
+    {
+      name        = "thor"
+      host        = "192.168.1.201"
+      user        = "root"
+      private_key = "~/.ssh/id_rsa"
     },
-    fenris = {
-      name = "fenris"
-      ip = "192.168.1.202"
-      labels = {
-        "node.kubernetes.io/pool" = "service-pool"
-      }
-      taints = {}
-      connection = {
-        type        = "ssh"
-        host        = "192.168.1.202"
-        user        = "root"
-        private_key = "~/.ssh/id_rsa"
-      }
-    },
-  }
-}
+    {
+      name        = "fenris"
+      host        = "192.168.1.202"
+      user        = "root"
+      private_key = "~/.ssh/id_rsa"
+    }
+]
 ```

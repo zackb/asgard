@@ -1,3 +1,26 @@
+locals {
+  agent_names = [
+    for node in var.nodes : node.name
+  ]
+  agent_nodes = [
+    for node in var.nodes : {
+      name = node.name
+      ip   = node.host
+      labels = {
+        "node.kubernetes.io/pool"        = "service-pool"
+        "node-role.kubernetes.io/worker" = "true"
+      }
+      taints = {}
+      connection = {
+        type        = "ssh"
+        host        = node.host
+        user        = "root"
+        private_key = file(node.private_key)
+      }
+    }
+  ]
+}
+
 module "k3s" {
   source  = "xunleii/k3s/module"
   version = "1.7.0"
@@ -22,8 +45,7 @@ module "k3s" {
     }
   }
 
-  // TODO!
-  agent_nodes = var.nodes
+  agent_nodes = zipmap(local.agent_names, local.agent_nodes)
 }
 
 resource null_resource kubeconfig {

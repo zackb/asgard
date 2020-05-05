@@ -10,11 +10,10 @@ variable "master" {
 
 variable "nodes" {
   description = "worker node configuration"
-  type = map(object({
-    name       = string
-    ip         = string
-    labels     = map(string)
-    taints     = map(string)
-    connection = map(any)
+  type = list(object({
+    name        = string
+    host        = string
+    user        = string
+    private_key = string
   }))
 }

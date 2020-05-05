@@ -22,33 +22,10 @@ data "helm_repository" "stable" {
   url      = "https://kubernetes-charts.storage.googleapis.com"
 }
 
-locals {
-  worker_names = [
-    for node in var.nodes : node.name
-  ]
-  worker_nodes = [
-    for node in var.nodes : {
-      name = node.name
-      ip   = node.host
-      labels = {
-        "node.kubernetes.io/pool"        = "service-pool"
-        "node-role.kubernetes.io/worker" = "true"
-      }
-      taints = {}
-      connection = {
-        type        = "ssh"
-        host        = node.host
-        user        = "root"
-        private_key = file(node.private_key)
-      }
-    }
-  ]
-}
-
 module "k3s" {
   source = "./modules/k3s"
   master = var.master
-  nodes  = zipmap(local.worker_names, local.worker_nodes)
+  nodes  = var.nodes
 }
 
 # APPS
