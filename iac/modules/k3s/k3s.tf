@@ -7,8 +7,8 @@ locals {
       name = node.name
       ip   = node.host
       labels = {
-        "node.kubernetes.io/pool"        = "service-pool"
-        "node-role.kubernetes.io/worker" = "true"
+        "node.kubernetes.io/pool" = "service-pool"
+        "node.kubernetes.io/type" = "worker"
       }
       taints = {}
       connection = {
