@@ -63,6 +63,7 @@ module "wintermute" {
     helm       = helm.asgard
   }
 
+  ingress_hostname = "${var.name}.${var.zone}"
   nats  = module.nats
   minio = module.minio
 }

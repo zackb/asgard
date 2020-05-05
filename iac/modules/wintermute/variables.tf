@@ -4,6 +4,11 @@ variable "namespace" {
   default     = "default"
 }
 
+variable "ingress_hostname" {
+  description = "hostname to use for ingress"
+  type        = string
+}
+
 variable "nats" {
   description = "nats connection"
   type = object({

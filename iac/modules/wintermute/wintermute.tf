@@ -6,6 +6,11 @@ resource "helm_release" "wintermute" {
   timeout   = 600
 
   set {
+    name  = "ingress.hostname"
+    value = var.ingress_hostname
+  }
+
+  set {
     name  = "mute.message"
     value = "winter is coming?"
   }

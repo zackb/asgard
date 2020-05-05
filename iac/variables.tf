@@ -4,6 +4,12 @@ variable "name" {
   default     = "asgard"
 }
 
+variable "zone" {
+  type        = string
+  description = "domain name zone"
+  default     = "jeedup.net"
+}
+
 variable "master" {
   description = "host to use for kubernetes master"
   type = object({
