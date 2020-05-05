@@ -49,7 +49,7 @@ module "minio" {
   }
 
   config = {
-    replicas     = 1
+    replicas     = max(length(var.nodes) + 1, 4) # minio requires at least 4 nodes in distributed mode
     storage_size = "4Gi"
     port         = 9000
   }
