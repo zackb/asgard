@@ -11,6 +11,16 @@ resource "helm_release" "wintermute" {
   }
 
   set {
+    name  = "ingress.tls.enabled"
+    value = var.tls_enabled
+  }
+
+  set {
+    name = "ingress.tls.secretName"
+    value = "${var.ingress_hostname}-cert"
+  }
+
+  set {
     name  = "mute.message"
     value = "winter is coming?"
   }

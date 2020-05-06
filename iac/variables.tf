@@ -1,13 +1,24 @@
 variable "name" {
-  type        = string
   description = "name of the kubernetes cluster"
+  type        = string
   default     = "asgard"
 }
 
 variable "zone" {
-  type        = string
   description = "domain name zone"
+  type        = string
   default     = "jeedup.net"
+}
+variable "email_address" {
+  description = "email address to use for Let's Encrypt"
+  type        = string
+  default     = "zack@bartel.com"
+}
+
+variable "tls_enabled" {
+  description = "enabled tls for ingress and install letsencrypt"
+  type        = bool
+  default     = true
 }
 
 variable "master" {

@@ -55,6 +55,28 @@ module "minio" {
   }
 }
 
+module "cert-manager" {
+  source     = "./modules/cert-manager"
+  kubeconfig = module.k3s.kubeconfig
+
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
+  }
+  email_address     = var.email_address
+  lets_encrypt_prod = true
+  certificates = var.tls_enabled ? [
+    {
+      domain    = local.hostname
+      namespace = module.wintermute.namespace
+    }
+  ] : []
+}
+
+locals {
+  hostname = "${var.name}.${var.zone}"
+}
+
 module "wintermute" {
   source = "./modules/wintermute"
 
@@ -63,19 +85,14 @@ module "wintermute" {
     helm       = helm.asgard
   }
 
-  ingress_hostname = "${var.name}.${var.zone}"
-  nats  = module.nats
-  minio = module.minio
+  ingress_hostname = local.hostname
+  nats             = module.nats
+  minio            = module.minio
+  tls_enabled      = var.tls_enabled
 }
 
 /*
 module "docker-registry" {
   source = "./modules/docker-registry"
-}
-
-module "cert-manager" {
-  source     = "./modules/cert-manager"
-  kubeconfig = module.k3s.kubeconfig
-  namespace  = "kube-system"
 }
 */

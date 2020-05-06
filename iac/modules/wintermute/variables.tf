@@ -9,6 +9,12 @@ variable "ingress_hostname" {
   type        = string
 }
 
+variable "tls_enabled" {
+  description = "ssl enabled or not"
+  type        = bool
+  default     = false
+}
+
 variable "nats" {
   description = "nats connection"
   type = object({
