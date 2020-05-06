@@ -63,8 +63,9 @@ module "cert-manager" {
     kubernetes = kubernetes.asgard
     helm       = helm.asgard
   }
+
   email_address     = var.email_address
-  lets_encrypt_prod = true
+  lets_encrypt_prod = false # set to true to use prod Let's Encrypt
   certificates = var.tls_enabled ? [
     {
       domain    = local.hostname
