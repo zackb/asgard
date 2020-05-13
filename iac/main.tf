@@ -49,7 +49,8 @@ module "minio" {
   }
 
   config = {
-    replicas     = max(length(var.nodes) + 1, 4) # minio requires at least 4 nodes in distributed mode
+    # minio requires at least 4 nodes in distributed mode
+    replicas     = max(length(var.nodes) + 1, 4)
     storage_size = "4Gi"
     port         = 9000
   }
@@ -64,8 +65,9 @@ module "cert-manager" {
     helm       = helm.asgard
   }
 
-  email_address     = var.email_address
-  lets_encrypt_prod = false # set to true to use prod Let's Encrypt
+  email_address = var.email_address
+  # set to true to use prod Let's Encrypt
+  lets_encrypt_prod = false
   certificates = var.tls_enabled ? [
     {
       domain    = local.hostname
@@ -90,6 +92,23 @@ module "wintermute" {
   nats             = module.nats
   minio            = module.minio
   tls_enabled      = var.tls_enabled
+}
+
+module "nextcloud" {
+  source = "./modules/nextcloud"
+
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
+  }
+
+  namespace        = "default"
+  ingress_hostname = "cloud.${local.hostname}"
+  cluster_issuer   = module.cert-manager.cluster_issuer
+
+  s3       = var.nextcloud.s3
+  password = var.nextcloud.username
+  username = var.nextcloud.password
 }
 
 /*

@@ -13,7 +13,7 @@ resource "helm_release" "cert-manager" {
   name      = "cert-manager"
   namespace = kubernetes_namespace.cert-manager.metadata.0.name
   chart     = "jetstack/cert-manager"
-  version   = "v0.14.3"
+  version   = "v0.14.3.0"
 
   depends_on = [null_resource.certmanager_prerequisites]
 }
@@ -29,7 +29,7 @@ resource "null_resource" "certmanager_prerequisites" {
     command = "kubectl apply --kubeconfig ${var.kubeconfig} --namespace ${kubernetes_namespace.cert-manager.metadata.0.name} -f https://github.com/jetstack/cert-manager/releases/download/v0.14.3/cert-manager.crds.yaml"
   }
   provisioner "local-exec" {
-    when    = "destroy"
+    when    = destroy
     command = "kubectl delete --kubeconfig ${var.kubeconfig} --namespace ${kubernetes_namespace.cert-manager.metadata.0.name} -f https://github.com/jetstack/cert-manager/releases/download/v0.14.3/cert-manager.crds.yaml"
   }
 }
@@ -46,7 +46,7 @@ EOF
 EOT
   }
   provisioner "local-exec" {
-    when    = "destroy"
+    when    = destroy
     command = <<EOT
       cat <<EOF | kubectl delete --kubeconfig ${var.kubeconfig} -f -
 ${data.template_file.certmanager_issuer.rendered}
@@ -73,7 +73,7 @@ EOF
 EOT
   }
   provisioner "local-exec" {
-    when    = "destroy"
+    when    = destroy
     command = <<EOT
       cat <<EOF | kubectl delete --kubeconfig ${var.kubeconfig} -f -
 ${data.template_file.certificate[count.index].rendered}

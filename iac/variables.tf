@@ -4,11 +4,35 @@ variable "name" {
   default     = "asgard"
 }
 
+variable "applications" {
+
+  description = "applications to install"
+
+  type = object({
+    minio           = bool
+    nats            = bool
+    cert-manger     = bool
+    docker-registry = bool
+    nextcloud       = bool
+    wintermute      = bool
+  })
+
+  default = {
+    minio           = true
+    nats            = true
+    cert-manger     = true
+    docker-registry = false
+    nextcloud       = true
+    wintermute      = true
+  }
+}
+
 variable "zone" {
   description = "domain name zone"
   type        = string
   default     = "jeedup.net"
 }
+
 variable "email_address" {
   description = "email address to use for Let's Encrypt"
   type        = string
@@ -61,4 +85,22 @@ variable "nodes" {
       private_key = "~/.ssh/id_rsa"
     }
   ]
+}
+
+variable "nextcloud" {
+  description = "nextcloud config"
+  type = object({
+
+    username = string
+    password = string
+
+    # s3 compatible object storage
+    s3 = object({
+      host       = string,
+      access_key = string,
+      secret_key = string,
+      bucket     = string,
+      region     = string,
+    })
+  })
 }
