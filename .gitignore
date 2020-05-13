@@ -4,3 +4,4 @@
 *.tfstate.backup
 kubeconfig.yaml
 .idea
+*.tfvars

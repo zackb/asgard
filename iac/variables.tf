@@ -22,7 +22,7 @@ variable "applications" {
     nats            = true
     cert-manger     = true
     docker-registry = false
-    nextcloud       = true
+    nextcloud       = false
     wintermute      = true
   }
 }
@@ -103,4 +103,16 @@ variable "nextcloud" {
       region     = string,
     })
   })
+
+  default = {
+    username = "changeme"
+    password = "changeme124"
+    s3 = {
+      host       = "s3.us-west-002.backblazeb2.com",
+      access_key = "mer",
+      secret_key = "mer",
+      bucket     = "cloud",
+      region     = "us-west-002",
+    }
+  }
 }

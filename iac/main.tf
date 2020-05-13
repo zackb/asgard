@@ -102,13 +102,14 @@ module "nextcloud" {
     helm       = helm.asgard
   }
 
+  enabled          = var.applications.nextcloud
   namespace        = "default"
   ingress_hostname = "cloud.${local.hostname}"
   cluster_issuer   = module.cert-manager.cluster_issuer
 
   s3       = var.nextcloud.s3
-  password = var.nextcloud.username
-  username = var.nextcloud.password
+  username = var.nextcloud.username
+  password = var.nextcloud.password
 }
 
 /*

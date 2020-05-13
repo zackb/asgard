@@ -26,7 +26,7 @@ nextcloud:
             'bucket'     => '${bucket}',
             'autocreate' => true,
             'hostname'   => '${s3_hostname}',
-            'key'        => '${acces_key}',
+            'key'        => '${access_key}',
             'secret'     => '${secret_key}',
             'region'     => '${region}',
             'use_ssl'    => true

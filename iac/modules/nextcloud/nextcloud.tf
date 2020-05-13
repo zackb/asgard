@@ -1,5 +1,5 @@
 resource "helm_release" "nextcloud" {
-  count     = var.enabled ? 0 : 1
+  count     = var.enabled ? 1 : 0
   name      = "nextcloud"
   namespace = var.namespace
   chart     = "stable/nextcloud"
@@ -11,7 +11,7 @@ resource "helm_release" "nextcloud" {
 }
 
 data "template_file" "nextcloud-values" {
-  count    = var.enabled ? 0 : 1
+  count    = var.enabled ? 1 : 0
   template = file("${path.module}/nextcloud.yaml")
 
   vars = {
