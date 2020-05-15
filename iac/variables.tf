@@ -83,6 +83,12 @@ variable "nodes" {
       host        = "192.168.1.202"
       user        = "root"
       private_key = "~/.ssh/id_rsa"
+    },
+    {
+      name        = "loki"
+      host        = "192.168.1.203"
+      user        = "root"
+      private_key = "~/.ssh/id_rsa"
     }
   ]
 }

@@ -1,3 +1,8 @@
+variable "k3s_version" {
+  description = "the version of k3s to install/upgrade"
+  type        = string
+}
+
 variable "master" {
   description = "master node configuration"
   type = object({

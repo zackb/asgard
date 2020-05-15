@@ -23,9 +23,10 @@ data "helm_repository" "stable" {
 }
 
 module "k3s" {
-  source = "./modules/k3s"
-  master = var.master
-  nodes  = var.nodes
+  source      = "./modules/k3s"
+  k3s_version = "v1.17.5+k3s1"
+  master      = var.master
+  nodes       = var.nodes
 }
 
 # APPS
