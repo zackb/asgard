@@ -35,6 +35,11 @@ resource "helm_release" "wintermute" {
     value = var.nats.port
   }
 
+  set {
+    name  = "mute.stan.cluster_id"
+    value = var.nats_streaming.cluster_id
+  }
+
   # Disable cockroachdb and minio
   set {
     name  = "mute.db.host"

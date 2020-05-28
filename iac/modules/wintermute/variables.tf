@@ -23,6 +23,13 @@ variable "nats" {
   })
 }
 
+variable "nats_streaming" {
+  description = "nats streaming connection information"
+  type = object({
+    cluster_id = string
+  })
+}
+
 variable "minio" {
   description = "minio connection"
   type = object({

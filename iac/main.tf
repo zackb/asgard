@@ -40,6 +40,18 @@ module "nats" {
   }
 }
 
+module "nats-streaming" {
+  source    = "./modules/nats-streaming"
+  namespace = "default"
+
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
+  }
+
+  nats = module.nats
+}
+
 module "minio" {
   source    = "./modules/minio"
   namespace = "default"
@@ -91,6 +103,7 @@ module "wintermute" {
 
   ingress_hostname = local.hostname
   nats             = module.nats
+  nats_streaming   = module.nats-streaming
   minio            = module.minio
   tls_enabled      = var.tls_enabled
 }

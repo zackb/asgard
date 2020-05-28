@@ -4,7 +4,7 @@ resource "helm_release" "nats" {
   repository = "https://nats-io.github.io/k8s/helm/charts/"
   namespace  = var.namespace
   chart      = "nats"
-  version    = "0.3.8"
+  version    = "0.4.0"
 
   set {
     name  = "cluster.enabled"
