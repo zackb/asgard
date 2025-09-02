@@ -33,13 +33,13 @@ variable "nats_streaming" {
 variable "minio" {
   description = "minio connection"
   default = {
-    endpoint   = ""
-    access_key = ""
-    secret_key = ""
+    endpoint      = ""
+    root_user     = ""
+    root_password = ""
   }
   type = object({
-    endpoint   = string
-    access_key = string
-    secret_key = string
+    endpoint      = string
+    root_user     = string
+    root_password = string
   })
 }

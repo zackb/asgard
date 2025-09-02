@@ -69,7 +69,11 @@ module "wintermute" {
   ingress_hostname = local.hostname
   nats             = module.nats
   nats_streaming   = module.nats-streaming
-  // minio            = module.minio
+  minio            = {
+    endpoint      = module.minio.endpoint
+    root_user     = module.minio.root_user
+    root_password = module.minio.root_password
+  }
   tls_enabled      = var.tls_enabled
 }
 

@@ -49,12 +49,11 @@ resource "helm_release" "wintermute" {
           host = ""
         }
         
-        # Uncomment when ready for minio
-        # fs = {
-        #   endpoint  = var.minio.endpoint
-        #   accessKey = var.minio.access_key
-        #   secretKey = var.minio.secret_key
-        # }
+        fs = {
+          endpoint        = var.minio.endpoint
+          accessKey        = var.minio.root_user
+          secretKey       = var.minio.root_password
+        }
       }
     })
   ]

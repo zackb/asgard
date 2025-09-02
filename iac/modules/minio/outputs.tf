@@ -2,6 +2,11 @@ output "namespace" {
   value = var.namespace
 }
 
+output "endpoint" {
+  description = "MinIO S3 API endpoint"
+  value       = var.ingress.enabled ? "${var.ingress.hostname}" : "${var.release_name}.${var.namespace}.svc.cluster.local:9000"
+}
+
 output "secret_name" {
   value = var.existing_secret_name != null ? var.existing_secret_name : kubernetes_secret.creds[0].metadata[0].name
 }
