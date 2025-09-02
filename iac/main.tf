@@ -70,7 +70,9 @@ module "wintermute" {
   nats             = module.nats
   nats_streaming   = module.nats-streaming
   minio            = {
-    endpoint      = module.minio.endpoint
+    endpoint              = module.minio.endpoint
+    existing_secret_name  = module.minio.secret_name
+
     root_user     = module.minio.root_user
     root_password = module.minio.root_password
   }

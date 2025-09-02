@@ -51,8 +51,9 @@ resource "helm_release" "wintermute" {
         
         fs = {
           endpoint        = var.minio.endpoint
-          accessKey        = var.minio.root_user
-          secretKey       = var.minio.root_password
+          // accessKey        = var.minio.root_user
+          // secretKey       = var.minio.root_password
+          existingSecret  = var.minio.existing_secret_name
         }
       }
     })

@@ -36,10 +36,12 @@ variable "minio" {
     endpoint      = ""
     root_user     = ""
     root_password = ""
+    existing_secret_name = ""
   }
   type = object({
-    endpoint      = string
-    root_user     = string
-    root_password = string
+    endpoint              = string
+    root_user             = string
+    root_password         = string
+    existing_secret_name  = string
   })
 }
