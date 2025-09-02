@@ -26,7 +26,7 @@ provider "helm" {
 
 module "k3s" {
   source      = "./modules/k3s"
-  k3s_version = "latest"
+  k3s_version = "v1.33.4+k3s1"
   master      = var.master
   nodes       = var.nodes
 }
@@ -42,7 +42,6 @@ module "nats" {
   }
 }
 
-/*
 module "nats-streaming" {
   source    = "./modules/nats-streaming"
   namespace = "default"
@@ -55,6 +54,26 @@ module "nats-streaming" {
   nats = module.nats
 }
 
+locals {
+  hostname = "${var.name}.${var.zone}"
+}
+
+module "wintermute" {
+  source = "./modules/wintermute"
+
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
+  }
+
+  ingress_hostname = local.hostname
+  nats             = module.nats
+  nats_streaming   = module.nats-streaming
+  // minio            = module.minio
+  tls_enabled      = var.tls_enabled
+}
+
+/*
 module "minio" {
   source    = "./modules/minio"
   namespace = "default"
@@ -92,27 +111,6 @@ module "cert-manager" {
       namespace = module.wintermute.namespace
     }
   ] : []
-}
-*/
-
-/*
-locals {
-  hostname = "${var.name}.${var.zone}"
-}
-
-module "wintermute" {
-  source = "./modules/wintermute"
-
-  providers = {
-    kubernetes = kubernetes.asgard
-    helm       = helm.asgard
-  }
-
-  ingress_hostname = local.hostname
-  nats             = module.nats
-  nats_streaming   = module.nats-streaming
-  minio            = module.minio
-  tls_enabled      = var.tls_enabled
 }
 */
 

@@ -18,34 +18,30 @@ resource "helm_release" "nats-streaming" {
   chart      = "stan"
   version    = "0.4.0"
 
-  set {
-    name  = "replicas"
-    value = var.replicas
-  }
-
-  set {
-    name  = "stan.logging.debug"
-    value = false
-  }
-
-  set {
-    name  = "stan.clusterID"
-    value = var.cluster_id
-  }
-
-  set {
-    name  = "store.type"
-    value = var.store_type
-  }
-
-  set {
-    name  = "stan.nats.url"
-    value = "nats://${var.nats.host}:${var.nats.port}"
-  }
-
-  # not arm, no prometheus
-  set {
-    name  = "exporter.enabled"
-    value = false
-  }
+  set = [
+    {
+      name  = "replicas"
+      value = var.replicas
+    },
+    {
+      name  = "stan.logging.debug"
+      value = false
+    },
+    {
+      name  = "stan.clusterID"
+      value = var.cluster_id
+    },
+    {
+      name  = "store.type"
+      value = var.store_type
+    },
+    {
+      name  = "stan.nats.url"
+      value = "nats://${var.nats.host}:${var.nats.port}"
+    },
+    {
+      name  = "exporter.enabled"
+      value = false
+    }
+  ]
 }
