@@ -1,30 +1,32 @@
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 3.0"
+    }
+  }
+}
+
 # PROVIDERS
 provider "kubernetes" {
-  alias = "asgard"
-
-  load_config_file = true
-  config_path      = "${path.module}/${module.k3s.kubeconfig}"
+  alias       = "asgard"
+  config_path = pathexpand("${path.module}/${module.k3s.kubeconfig}")
 }
 
 provider "helm" {
   alias = "asgard"
-
-  kubernetes {
-    load_config_file = true
-    config_path      = "${path.module}/${module.k3s.kubeconfig}"
+  kubernetes = {
+    config_path = pathexpand("${path.module}/${module.k3s.kubeconfig}")
   }
-  debug = true
-}
-
-data "helm_repository" "stable" {
-  provider = helm.asgard
-  name     = "stable"
-  url      = "https://kubernetes-charts.storage.googleapis.com"
 }
 
 module "k3s" {
   source      = "./modules/k3s"
-  k3s_version = "v1.17.5+k3s1"
+  k3s_version = "v1.33.4+k3s1"
   master      = var.master
   nodes       = var.nodes
 }
@@ -52,43 +54,6 @@ module "nats-streaming" {
   nats = module.nats
 }
 
-module "minio" {
-  source    = "./modules/minio"
-  namespace = "default"
-
-  providers = {
-    kubernetes = kubernetes.asgard
-    helm       = helm.asgard
-  }
-
-  config = {
-    # minio requires at least 4 nodes in distributed mode
-    replicas     = max(length(var.nodes) + 1, 4)
-    storage_size = "4Gi"
-    port         = 9000
-  }
-}
-
-module "cert-manager" {
-  source     = "./modules/cert-manager"
-  kubeconfig = module.k3s.kubeconfig
-
-  providers = {
-    kubernetes = kubernetes.asgard
-    helm       = helm.asgard
-  }
-
-  email_address = var.email_address
-  # set to true to use prod Let's Encrypt
-  lets_encrypt_prod = false
-  certificates = var.tls_enabled ? [
-    {
-      domain    = local.hostname
-      namespace = module.wintermute.namespace
-    }
-  ] : []
-}
-
 locals {
   hostname = "${var.name}.${var.zone}"
 }
@@ -104,10 +69,51 @@ module "wintermute" {
   ingress_hostname = local.hostname
   nats             = module.nats
   nats_streaming   = module.nats-streaming
-  minio            = module.minio
+  minio            = {
+    endpoint              = module.minio.endpoint
+    existing_secret_name  = module.minio.secret_name
+
+    root_user     = module.minio.root_user
+    root_password = module.minio.root_password
+  }
   tls_enabled      = var.tls_enabled
 }
 
+module "minio" {
+  source = "./modules/minio"
+
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
+  }
+
+  release_name     = "minio"
+  namespace        = "default"
+
+  storage_size  = "10Gi"
+  mode          = "distributed"
+  replicas      = 4
+
+  ingress = {
+    enabled = false
+  }
+}
+
+
+
+module "cert-manager" {
+  source     = "./modules/cert-manager"
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
+  }
+
+  email_address = var.email_address
+  # set to true to use prod Let's Encrypt
+  lets_encrypt_prod = true
+}
+
+/*
 module "nextcloud" {
   source = "./modules/nextcloud"
 
@@ -125,9 +131,21 @@ module "nextcloud" {
   username = var.nextcloud.username
   password = var.nextcloud.password
 }
+*/
 
-/*
 module "docker-registry" {
   source = "./modules/docker-registry"
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
+  }
 }
-*/
+
+output "registry_username" {
+  value = module.docker-registry.registry_username
+}
+
+output "registry_password" {
+  value     = module.docker-registry.registry_password
+  sensitive = true
+}

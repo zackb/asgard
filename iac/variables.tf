@@ -30,7 +30,7 @@ variable "applications" {
 variable "zone" {
   description = "domain name zone"
   type        = string
-  default     = "jeedup.net"
+  default     = "bartel.com"
 }
 
 variable "email_address" {

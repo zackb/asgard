@@ -1,11 +1,11 @@
 
-curl -i -H 'Content-Type: application/json' -XPUT --data-binary '{"hello":"world"}' asgard.jeedup.net/fs/foo/bar
+curl -i -H 'Content-Type: application/json' -XPUT --data-binary '{"hello":"world"}' asgard.bartel.com/fs/foo/bar
 
-curl -i -XPOST --data-binary 'hello queue' asgard.jeedup.net/node/queue
+curl -i -XPOST --data-binary 'hello queue' asgard.bartel.com/node/queue
 
-curl -i -XPOST --data-binary 'hello broadcast' asgard.jeedup.net/node/broadcast
+curl -i -XPOST --data-binary 'hello broadcast' asgard.bartel.com/node/broadcast
 
-curl -i -XPOST --data-binary 'hello stream' asgard.jeedup.net/node/stream
+curl -i -XPOST --data-binary 'hello stream' asgard.bartel.com/node/stream
 
 
 

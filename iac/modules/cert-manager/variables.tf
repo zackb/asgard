@@ -1,8 +1,3 @@
-variable "kubeconfig" {
-  description = "kubeconfig yaml"
-  type        = string
-}
-
 variable "email_address" {
   description = "Let's Encrypt will use this to contact you about expiring certificates, and issues related to your account."
 }
