@@ -1,4 +1,5 @@
 # PROVIDERS
+/*
 provider "kubernetes" {
   alias = "asgard"
 
@@ -10,24 +11,18 @@ provider "helm" {
   alias = "asgard"
 
   kubernetes {
-    load_config_file = true
-    config_path      = "${path.module}/${module.k3s.kubeconfig}"
+    host = kubernetes.asgard.host
   }
-  debug = true
 }
-
-data "helm_repository" "stable" {
-  provider = helm.asgard
-  name     = "stable"
-  url      = "https://kubernetes-charts.storage.googleapis.com"
-}
+*/
 
 module "k3s" {
   source      = "./modules/k3s"
-  k3s_version = "v1.17.5+k3s1"
+  k3s_version = "latest"
   master      = var.master
   nodes       = var.nodes
 }
+/*
 
 # APPS
 module "nats" {
@@ -68,7 +63,9 @@ module "minio" {
     port         = 9000
   }
 }
+*/
 
+/*
 module "cert-manager" {
   source     = "./modules/cert-manager"
   kubeconfig = module.k3s.kubeconfig
@@ -88,7 +85,9 @@ module "cert-manager" {
     }
   ] : []
 }
+*/
 
+/*
 locals {
   hostname = "${var.name}.${var.zone}"
 }
@@ -107,7 +106,9 @@ module "wintermute" {
   minio            = module.minio
   tls_enabled      = var.tls_enabled
 }
+*/
 
+/*
 module "nextcloud" {
   source = "./modules/nextcloud"
 
@@ -125,6 +126,7 @@ module "nextcloud" {
   username = var.nextcloud.username
   password = var.nextcloud.password
 }
+*/
 
 /*
 module "docker-registry" {

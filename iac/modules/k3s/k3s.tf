@@ -22,8 +22,7 @@ locals {
 }
 
 module "k3s" {
-  source      = "xunleii/k3s/module"
-  version     = "1.7.0"
+  source      = "../k3s.xunleii"
   k3s_version = var.k3s_version
 
   server_node = {

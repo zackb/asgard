@@ -1,5 +1,5 @@
 terraform {
   backend "local" {
-    path = "/Users/zack/Documents/Asgard/terraform.tfstate"
+    path = "/home/zackb/code/asgard/terraform.tfstate"
   }
 }
