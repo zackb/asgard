@@ -73,24 +73,27 @@ module "wintermute" {
   tls_enabled      = var.tls_enabled
 }
 
-/*
 module "minio" {
-  source    = "./modules/minio"
-  namespace = "default"
+  source = "./modules/minio"
 
   providers = {
     kubernetes = kubernetes.asgard
     helm       = helm.asgard
   }
 
-  config = {
-    # minio requires at least 4 nodes in distributed mode
-    replicas     = max(length(var.nodes) + 1, 4)
-    storage_size = "4Gi"
-    port         = 9000
+  release_name     = "minio"
+  namespace        = "default"
+
+  storage_size  = "10Gi"
+  mode          = "distributed"
+  replicas      = 4
+
+  ingress = {
+    enabled = false
   }
 }
-*/
+
+
 
 module "cert-manager" {
   source     = "./modules/cert-manager"
