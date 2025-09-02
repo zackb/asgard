@@ -58,3 +58,24 @@ resource "helm_release" "docker_registry" {
     })
   ]
 }
+
+resource "kubernetes_secret" "registry_pull_secret" {
+  metadata {
+    name      = "registry-secret"
+    namespace = "default"  # TODO
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+
+  data = {
+    ".dockerconfigjson" = jsonencode({
+      auths = {
+        "registry.bartel.com" = {
+          username = "admin"
+          password = random_password.registry_password.result
+          auth     = base64encode("admin:${random_password.registry_password.result}")
+        }
+      }
+    })
+  }
+}

@@ -19,6 +19,14 @@ resource "helm_release" "wintermute" {
       value = "${var.ingress_hostname}-cert"
     },
     {
+      name  = "mute.image"
+      value = "registry.bartel.com/wintermute"
+    },
+    {
+      name  = "mute.imagePullSecrets"
+      value = "registry-secret"
+    },
+    {
       name  = "mute.message"
       value = "winter is coming?"
     },
