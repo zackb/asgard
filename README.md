@@ -4,7 +4,7 @@ This is a terraform definition to install and manage Kubernetes on a cluster of 
 
 
 ### k3s
-Uses the awesome [k3s](https://k3s.io) and [xunleii's](https://registry.terraform.io/modules/xunleii/k3s/module) great terraform module to install and manage Kubernetes
+Uses [k3s](https://k3s.io) and a forked version of [xunleii's](https://registry.terraform.io/modules/xunleii/k3s/module) terraform module to install and manage Kubernetes
 
 
 ### Software
