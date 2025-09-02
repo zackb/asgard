@@ -134,8 +134,19 @@ module "nextcloud" {
 }
 */
 
-/*
 module "docker-registry" {
   source = "./modules/docker-registry"
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
+  }
 }
-*/
+
+output "registry_username" {
+  value = module.docker-registry.registry_username
+}
+
+output "registry_password" {
+  value     = module.docker-registry.registry_password
+  sensitive = true
+}

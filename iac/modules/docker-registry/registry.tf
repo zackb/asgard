@@ -1,18 +1,60 @@
-resource "helm_release" "docker_registry" {
-  chart     = "stable/docker-registry"
-  name      = "docker-registry"
-  namespace = "kube-system"
-
-  set {
-    name = "ingress.enabled"
-    value = true
-  }
-
-  dynamic "set" {
-    for_each = ["docker.jeedup.net"]
-    content {
-      name  = join("", ["ingress.hosts[", set.key, "]"])
-      value = set.value
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = ">= 2.0"
     }
   }
+}
+
+resource "random_password" "registry_password" {
+  length  = 16
+  special = true
+}
+
+resource "kubernetes_secret" "registry_auth" {
+  metadata {
+    name      = "registry-auth"
+    namespace = "default"
+  }
+  
+  data = {
+    htpasswd = "admin:${bcrypt(random_password.registry_password.result)}"
+  }
+}
+
+resource "helm_release" "docker_registry" {
+  name             = "registry"
+  repository       = "https://helm.twun.io"
+  chart            = "docker-registry"
+  namespace        = "default"
+  create_namespace = true
+  
+  depends_on = [kubernetes_secret.registry_auth]
+  
+  values = [
+    yamlencode({
+      persistence = {
+        enabled = true
+        size    = "20Gi"
+      }
+      ingress = {
+        enabled = true
+        hosts   = ["registry.bartel.com"]
+        ingressClassName = "traefik"
+        className = "traefik"
+        annotations = {
+          "kubernetes.io/ingress.class" = "traefik"
+        }
+      }
+      secrets = {
+        htpasswd = ""
+      }
+      existingSecret = "registry-auth"
+    })
+  ]
 }
