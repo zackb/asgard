@@ -34,7 +34,7 @@ resource "helm_release" "wintermute" {
       mute = {
         image   = "registry.bartel.com/mute"
         imagePullSecrets = "registry-secret"
-        message = "winter is coming?!?"
+        message = "winter is coming?!?!"
         
         nats = {
           host = var.nats.host
