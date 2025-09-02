@@ -1,20 +1,28 @@
-# PROVIDERS
-/*
-provider "kubernetes" {
-  alias = "asgard"
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 3.0"
+    }
+  }
+}
 
-  load_config_file = true
-  config_path      = "${path.module}/${module.k3s.kubeconfig}"
+# PROVIDERS
+provider "kubernetes" {
+  alias       = "asgard"
+  config_path = pathexpand("${path.module}/${module.k3s.kubeconfig}")
 }
 
 provider "helm" {
   alias = "asgard"
-
-  kubernetes {
-    host = kubernetes.asgard.host
+  kubernetes = {
+    config_path = pathexpand("${path.module}/${module.k3s.kubeconfig}")
   }
 }
-*/
 
 module "k3s" {
   source      = "./modules/k3s"
@@ -22,7 +30,6 @@ module "k3s" {
   master      = var.master
   nodes       = var.nodes
 }
-/*
 
 # APPS
 module "nats" {
@@ -35,6 +42,7 @@ module "nats" {
   }
 }
 
+/*
 module "nats-streaming" {
   source    = "./modules/nats-streaming"
   namespace = "default"

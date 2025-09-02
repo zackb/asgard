@@ -18,24 +18,22 @@ resource "helm_release" "nats" {
   chart      = "nats"
   version    = "0.4.0"
 
-  set {
-    name  = "cluster.enabled"
-    value = true
-  }
-
-  # these are not arm
-  set {
-    name  = "reloader.enabled"
-    value = false
-  }
-
-  set {
-    name  = "exporter.enabled"
-    value = false
-  }
-
-  set {
-    name  = "natsbox.enabled"
-    value = false
-  }
+  set = [
+    {
+      name  = "cluster.enabled"
+      value = "true"
+    },
+    {
+      name  = "reloader.enabled"
+      value = "false"
+    },
+    {
+      name  = "exporter.enabled"
+      value = "false"
+    },
+    {
+      name  = "natsbox.enabled"
+      value = "false"
+    }
+  ]
 }
