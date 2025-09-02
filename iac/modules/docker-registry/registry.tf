@@ -49,7 +49,14 @@ resource "helm_release" "docker_registry" {
         className = "traefik"
         annotations = {
           "kubernetes.io/ingress.class" = "traefik"
+          "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
         }
+        tls = [
+          {
+            secretName = "registry-tls"
+            hosts      = ["registry.bartel.com"]
+          }
+        ]
       }
       secrets = {
         htpasswd = ""

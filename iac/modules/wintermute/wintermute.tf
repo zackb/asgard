@@ -1,65 +1,63 @@
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = ">= 2.0"
+    }
+  }
+}
+
 resource "helm_release" "wintermute" {
   name      = "wintermute"
   namespace = var.namespace
   chart     = "../../wintermute/helm/wintermute"
   version   = "0.0.1"
   timeout   = 600
-
-  set = [
-    {
-      name  = "ingress.hostname"
-      value = var.ingress_hostname
-    },
-    {
-      name  = "ingress.tls.enabled"
-      value = var.tls_enabled
-    },
-    {
-      name = "ingress.tls.secretName"
-      value = "${var.ingress_hostname}-cert"
-    },
-    {
-      name  = "mute.image"
-      value = "registry.bartel.com/wintermute"
-    },
-    {
-      name  = "mute.imagePullSecrets"
-      value = "registry-secret"
-    },
-    {
-      name  = "mute.message"
-      value = "winter is coming?"
-    },
-    {
-      name  = "mute.nats.host"
-      value = var.nats.host
-    },
-    {
-      name  = "mute.nats.port"
-      value = var.nats.port
-    },
-    {
-      name  = "mute.stan.cluster_id"
-      value = var.nats_streaming.cluster_id
-    },
-    {
-      # Disable cockroachdb and minio
-      name  = "mute.db.host"
-      value = ""
-    }
-    /*
-    {
-      name  = "mute.fs.endpoint"
-      value = var.minio.endpoint
-    },
-    {
-      name  = "mute.fs.accessKey"
-      value = var.minio.access_key
-    },
-    {
-      name  = "mute.fs.secretKey"
-      value = var.minio.secret_key
-    }
-    */
+  
+  values = [
+    yamlencode({
+      ingress = {
+        hostname = var.ingress_hostname
+        tls = {
+          enabled    = var.tls_enabled
+          secretName = "${var.ingress_hostname}-cert"
+        }
+        additionalAnnotations = {
+          "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
+        }
+      }
+      
+      mute = {
+        image   = "zackb/mute"
+        // image   = "registry.bartel.com/mute" TODO
+        message = "winter is coming?"
+        
+        // imagePullSecrets = "registry-secret"
+        
+        nats = {
+          host = var.nats.host
+          port = var.nats.port
+        }
+        
+        stan = {
+          cluster_id = var.nats_streaming.cluster_id
+        }
+        
+        db = {
+          host = ""
+        }
+        
+        # Uncomment when ready for minio
+        # fs = {
+        #   endpoint  = var.minio.endpoint
+        #   accessKey = var.minio.access_key
+        #   secretKey = var.minio.secret_key
+        # }
+      }
+    })
   ]
 }

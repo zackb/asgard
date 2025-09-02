@@ -92,11 +92,8 @@ module "minio" {
 }
 */
 
-/*
 module "cert-manager" {
   source     = "./modules/cert-manager"
-  kubeconfig = module.k3s.kubeconfig
-
   providers = {
     kubernetes = kubernetes.asgard
     helm       = helm.asgard
@@ -104,15 +101,8 @@ module "cert-manager" {
 
   email_address = var.email_address
   # set to true to use prod Let's Encrypt
-  lets_encrypt_prod = false
-  certificates = var.tls_enabled ? [
-    {
-      domain    = local.hostname
-      namespace = module.wintermute.namespace
-    }
-  ] : []
+  lets_encrypt_prod = true
 }
-*/
 
 /*
 module "nextcloud" {

@@ -12,3 +12,8 @@ apply:
 apply-k8s:
 	terraform apply -target=module.k3s -var-file="asgard.tfvars"
 
+cert-manager:
+	 terraform apply -var-file="asgard.tfvars" -target=module.cert-manager.helm_release.cert_manager
+
+docker-login:
+	docker login registry.bartel.com -u admin -p $(terraform output -raw registry_password)
