@@ -17,3 +17,6 @@ cert-manager:
 
 docker-login:
 	docker login registry.bartel.com -u admin -p $(terraform output -raw registry_password)
+
+traefik-logs:
+	kubectl --kubeconfig kubeconfig.yaml -n kube-system logs deploy/traefik -f
