@@ -133,6 +133,18 @@ module "nextcloud" {
 }
 */
 
+module "echovault" {
+  source = "./modules/echovault"
+
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
+  }
+
+  ingress_hostname = "ev.${var.zone}"
+  tls_enabled      = false // var.tls_enabled
+}
+
 module "docker-registry" {
   source = "./modules/docker-registry"
   providers = {
