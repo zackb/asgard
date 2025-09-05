@@ -32,7 +32,7 @@ resource "helm_release" "echovault" {
       }
       
       echovault = {
-        image   = "registry.bartel.com/echovault"
+        image   = "registry.bartel.com/echovault/echovault"
         imagePullSecrets = "registry-secret"
       }
     })
