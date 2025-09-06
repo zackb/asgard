@@ -11,6 +11,19 @@ terraform {
   }
 }
 
+resource "kubernetes_secret" "jwks" {
+  metadata {
+    name = "jwks-secret"
+  }
+
+  data = {
+    "jwks.json" = var.jwks_json
+  }
+
+  type = "Opaque"
+}
+
+
 resource "helm_release" "echovault" {
   name      = "echovault"
   namespace = var.namespace
@@ -21,6 +34,7 @@ resource "helm_release" "echovault" {
   values = [
     yamlencode({
       ingress = {
+        enabled  = true
         hostname = var.ingress_hostname
         tls = {
           enabled    = var.tls_enabled
@@ -34,6 +48,7 @@ resource "helm_release" "echovault" {
       echovault = {
         image   = "registry.bartel.com/echovault/echovault"
         imagePullSecrets = "registry-secret"
+        jwksSecretName  = kubernetes_secret.jwks.metadata[0].name
       }
     })
   ]

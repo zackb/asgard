@@ -142,7 +142,8 @@ module "echovault" {
   }
 
   ingress_hostname = "ev.${var.zone}"
-  tls_enabled      = false // var.tls_enabled
+  tls_enabled      = var.tls_enabled
+  jwks_json        = var.jwks_json
 }
 
 module "docker-registry" {

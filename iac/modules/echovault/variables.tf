@@ -14,3 +14,8 @@ variable "tls_enabled" {
   type        = bool
   default     = false
 }
+
+variable "jwks_json" {
+  description = "JWKS JSON content for echovault auth"
+  type        = string
+}

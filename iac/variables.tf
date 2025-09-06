@@ -122,3 +122,10 @@ variable "nextcloud" {
     }
   }
 }
+
+variable "jwks_json" {
+  type        = string
+  description = "JWKS JSON"
+  sensitive   = true
+}
+
