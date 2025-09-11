@@ -19,3 +19,9 @@ variable "jwks_json" {
   description = "JWKS JSON content for echovault auth"
   type        = string
 }
+
+variable "db_secret_name" {
+  description = "Kubernetes secret name containing the database DSN in DATABASE_URL key"
+  type        = string
+  default     = "echovault-db"
+}

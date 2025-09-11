@@ -30,7 +30,7 @@ resource "helm_release" "echovault" {
   chart     = "../../echovault/deployments/helm/echovault"
   version   = "0.0.1"
   timeout   = 600
-  
+
   values = [
     yamlencode({
       ingress = {
@@ -44,11 +44,12 @@ resource "helm_release" "echovault" {
           "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
         }
       }
-      
+
       echovault = {
-        image   = "registry.bartel.com/echovault/echovault"
+        image            = "registry.bartel.com/echovault/echovault"
         imagePullSecrets = "registry-secret"
-        jwksSecretName  = kubernetes_secret.jwks.metadata[0].name
+        jwksSecretName   = kubernetes_secret.jwks.metadata[0].name
+        dbSecretName     = var.db_secret_name
       }
     })
   ]

@@ -69,14 +69,14 @@ module "wintermute" {
   ingress_hostname = local.hostname
   nats             = module.nats
   nats_streaming   = module.nats-streaming
-  minio            = {
-    endpoint              = module.minio.endpoint
-    existing_secret_name  = module.minio.secret_name
+  minio = {
+    endpoint             = module.minio.endpoint
+    existing_secret_name = module.minio.secret_name
 
     root_user     = module.minio.root_user
     root_password = module.minio.root_password
   }
-  tls_enabled      = var.tls_enabled
+  tls_enabled = var.tls_enabled
 }
 
 module "minio" {
@@ -87,12 +87,12 @@ module "minio" {
     helm       = helm.asgard
   }
 
-  release_name     = "minio"
-  namespace        = "default"
+  release_name = "minio"
+  namespace    = "default"
 
-  storage_size  = "10Gi"
-  mode          = "distributed"
-  replicas      = 4
+  storage_size = "10Gi"
+  mode         = "distributed"
+  replicas     = 4
 
   ingress = {
     enabled = false
@@ -102,7 +102,7 @@ module "minio" {
 
 
 module "cert-manager" {
-  source     = "./modules/cert-manager"
+  source = "./modules/cert-manager"
   providers = {
     kubernetes = kubernetes.asgard
     helm       = helm.asgard
@@ -133,6 +133,31 @@ module "nextcloud" {
 }
 */
 
+module "postgresql" {
+  source = "./modules/postgresql"
+
+  providers = {
+    kubernetes = kubernetes.asgard
+    helm       = helm.asgard
+  }
+
+  namespace    = "db"
+  storage_size = "5Gi"
+  init_dbs = [
+    {
+      namespace = "default"
+      name      = "echovault"
+      username  = "echovault"
+      password  = random_password.echovault_db_password.result
+    }
+  ]
+}
+
+resource "random_password" "echovault_db_password" {
+  length  = 16
+  special = false
+}
+
 module "echovault" {
   source = "./modules/echovault"
 
@@ -144,6 +169,7 @@ module "echovault" {
   ingress_hostname = "ev.${var.zone}"
   tls_enabled      = var.tls_enabled
   jwks_json        = var.jwks_json
+  db_secret_name   = "echovault-db"
 }
 
 module "docker-registry" {
