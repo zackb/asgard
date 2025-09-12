@@ -20,3 +20,7 @@ docker-login:
 
 traefik-logs:
 	kubectl --kubeconfig kubeconfig.yaml -n kube-system logs deploy/traefik -f
+
+psql:
+	kubectl --kubeconfig kubeconfig.yaml -n db get secret postgresql -o jsonpath='{.data.postgres-password}' | base64 -d
+	kubectl --kubeconfig kubeconfig.yaml exec -it svc/postgresql -n db -- psql -U postgres
