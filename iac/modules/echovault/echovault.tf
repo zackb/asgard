@@ -28,7 +28,7 @@ resource "helm_release" "echovault" {
   name      = "echovault"
   namespace = var.namespace
   chart     = "../../echovault/deployments/helm/echovault"
-  version   = "0.0.1"
+  version   = "0.0.2"
   timeout   = 600
 
   values = [
