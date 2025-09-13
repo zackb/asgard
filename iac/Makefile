@@ -23,4 +23,5 @@ traefik-logs:
 
 psql:
 	kubectl --kubeconfig kubeconfig.yaml -n db get secret postgresql -o jsonpath='{.data.postgres-password}' | base64 -d
+	@echo ""
 	kubectl --kubeconfig kubeconfig.yaml exec -it svc/postgresql -n db -- psql -U postgres

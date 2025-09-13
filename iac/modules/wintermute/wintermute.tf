@@ -17,7 +17,7 @@ resource "helm_release" "wintermute" {
   chart     = "../../wintermute/helm/wintermute"
   version   = "0.0.1"
   timeout   = 600
-  
+
   values = [
     yamlencode({
       ingress = {
@@ -30,30 +30,30 @@ resource "helm_release" "wintermute" {
           "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
         }
       }
-      
+
       mute = {
-        image   = "registry.bartel.com/mute"
+        image            = "registry.bartel.com/mute"
         imagePullSecrets = "registry-secret"
-        message = "winter is coming?!?!"
-        
+        message          = "winter is coming?!?!"
+
         nats = {
           host = var.nats.host
           port = var.nats.port
         }
-        
+
         stan = {
           cluster_id = var.nats_streaming.cluster_id
         }
-        
+
         db = {
           host = ""
         }
-        
+
         fs = {
-          endpoint        = var.minio.endpoint
+          endpoint = var.minio.endpoint
           // accessKey        = var.minio.root_user
           // secretKey       = var.minio.root_password
-          existingSecret  = var.minio.existing_secret_name
+          existingSecret = var.minio.existing_secret_name
         }
       }
     })

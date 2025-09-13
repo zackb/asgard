@@ -50,6 +50,11 @@ resource "helm_release" "echovault" {
         imagePullSecrets = "registry-secret"
         jwksSecretName   = kubernetes_secret.jwks.metadata[0].name
         dbSecretName     = var.db_secret_name
+        minio = {
+          enabled        = var.minio.endpoint != ""
+          endpoint       = var.minio.endpoint
+          existingSecret = var.minio.existing_secret_name
+        }
       }
     })
   ]

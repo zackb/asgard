@@ -25,3 +25,19 @@ variable "db_secret_name" {
   type        = string
   default     = "echovault-db"
 }
+
+variable "minio" {
+  description = "minio connection"
+  default = {
+    endpoint             = ""
+    root_user            = ""
+    root_password        = ""
+    existing_secret_name = ""
+  }
+  type = object({
+    endpoint             = string
+    root_user            = string
+    root_password        = string
+    existing_secret_name = string
+  })
+}
