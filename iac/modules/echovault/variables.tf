@@ -26,6 +26,12 @@ variable "db_secret_name" {
   default     = "echovault-db"
 }
 
+variable "replicas" {
+  description = "number of replicas for echovault deployment"
+  type        = number
+  default     = 1
+}
+
 variable "minio" {
   description = "minio connection"
   default = {

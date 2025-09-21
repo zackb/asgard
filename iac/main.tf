@@ -168,6 +168,7 @@ module "echovault" {
 
   ingress_hostname = "ev.${var.zone}"
   tls_enabled      = var.tls_enabled
+  replicas         = 2
   jwks_json        = var.jwks_json
   db_secret_name   = "echovault-db"
   minio = {

@@ -48,6 +48,7 @@ resource "helm_release" "echovault" {
       echovault = {
         image            = "registry.bartel.com/echovault/echovault"
         imagePullSecrets = "registry-secret"
+        replicas         = var.replicas
         jwksSecretName   = kubernetes_secret.jwks.metadata[0].name
         dbSecretName     = var.db_secret_name
         minio = {
