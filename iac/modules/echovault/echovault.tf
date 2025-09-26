@@ -28,7 +28,7 @@ resource "helm_release" "echovault" {
   name      = "echovault"
   namespace = var.namespace
   chart     = "../../echovault/deployments/helm/echovault"
-  version   = "0.0.2"
+  version   = "0.0.3"
   timeout   = 600
 
   values = [
@@ -51,6 +51,7 @@ resource "helm_release" "echovault" {
         replicas         = var.replicas
         jwksSecretName   = kubernetes_secret.jwks.metadata[0].name
         dbSecretName     = var.db_secret_name
+        encryptionKey    = "Z4fD6g8H9jK3mN5pQ2sV7xY1zB4eF6gH"
         minio = {
           enabled        = var.minio.endpoint != ""
           endpoint       = var.minio.endpoint
